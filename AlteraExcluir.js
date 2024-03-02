@@ -1,19 +1,26 @@
-import React from "react";
-import { View, StyleSheet, Text } from "react-native";
-import { Input, Button } from "react-native-elements";
-import { useNavigation } from "@react-navigation/native";
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
+import { Input, Button} from 'react-native-elements';
+import { useNavigation } from '@react-navigation/native';
 
-export default function Cadastrar () {    
+export default function AlteraExcluir(){
 
-  const navigation = useNavigation()
+    const navigation = useNavigation()
 
-  return (
+    return (
+       <View style={{ flex: 1}}>
+      <Header
+      leftComponent={
+          <Button  
+          title="< Voltar"
+          onPress={()=>navigation.navigate("ListaContatos")}
+          ></Button>}
+          centerComponent={{ text: 'Cadastro de Clientes', style: { color: '#fff' } }}
+      
+      />
 
-      <View style={styles.container}>
 
-
-      <View style={styles.formContainer}>
-
+      
       <Text style={styles.titleText}>Cadastro Contato</Text>
 
 
@@ -26,20 +33,23 @@ export default function Cadastrar () {
           inputStyle={styles.input}  
         />
         <Input
-          placeholder="Senha"
-          secureTextEntry
+          placeholder="Telefone"
           inputStyle={styles.input}  
         />
         <Button
         onPress={()=>navigation.navigate("Home")}
-          title="Cadastrar"
+          title="Alatera"
           buttonStyle={styles.loginButton}
           titleStyle={styles.loginButtonText}
         />
-      
-      </View>
+        <Button
+          title="Excluir"
+          buttonStyle={styles.loginButton}
+          titleStyle={styles.loginButtonText}
+        />
 
       </View>
+      
   
   
   );

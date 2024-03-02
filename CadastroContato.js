@@ -1,19 +1,15 @@
-import React from "react";
-import { View, StyleSheet, Text } from "react-native";
-import { Input, Button } from "react-native-elements";
-import { useNavigation } from "@react-navigation/native";
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import {  Header, Button, Input } from 'react-native-elements' 
 
-export default function Cadastrar () {    
+export default function CadastroContato (){
 
-  const navigation = useNavigation()
+    const navigation = useNavigation()
 
-  return (
+    return(
 
-      <View style={styles.container}>
-
-
-      <View style={styles.formContainer}>
-
+      <View style={styles.container}>      
       <Text style={styles.titleText}>Cadastro Contato</Text>
 
 
@@ -26,20 +22,20 @@ export default function Cadastrar () {
           inputStyle={styles.input}  
         />
         <Input
-          placeholder="Senha"
+          placeholder="Telefone"
           secureTextEntry
           inputStyle={styles.input}  
         />
         <Button
         onPress={()=>navigation.navigate("Home")}
-          title="Cadastrar"
+          title="Salvar"
           buttonStyle={styles.loginButton}
           titleStyle={styles.loginButtonText}
         />
-      
-      </View>
+       
 
       </View>
+      
   
   
   );
