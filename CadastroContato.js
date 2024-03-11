@@ -1,45 +1,63 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet, Text } from 'react-native';
+import { Button, Input } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
-import {  Header, Button, Input } from 'react-native-elements' 
+import axios from 'axios';
 
-export default function CadastroContato (){
+export default function CadastroContato() {
+  const navigation = useNavigation();
+  const [nome, setNome] = useState('');
+  const [email, setEmail] = useState('');
+  const [telefone, setTelefone] = useState('');
 
-    const navigation = useNavigation()
+  const handleSalvar = async () => {
+    try {
+      // Enviar dados para o JSON Server
+      await axios.post('http://localhost:3000/list', {
+        nome,
+        email,
+        telefone,
+      });
 
-    return(
+      // Atualizar a lista de contatos após o cadastro
+      navigation.goBack();
+    } catch (error) {
+      console.error('Erro ao cadastrar contato:', error);
+    }
+  };
 
-      <View style={styles.container}>      
-      <Text style={styles.titleText}>Cadastro Contato</Text>
-
-
+  return (
+    <View style={styles.container}>
+      <View style={styles.formContainer}>
+        <Text style={styles.titleText}>Cadastro Contato</Text>
         <Input
           placeholder="Nome"
           inputStyle={styles.input}
+          value={nome}
+          onChangeText={setNome}
         />
         <Input
           placeholder="Email"
-          inputStyle={styles.input}  
+          inputStyle={styles.input}
+          value={email}
+          onChangeText={setEmail}
         />
         <Input
           placeholder="Telefone"
-          secureTextEntry
-          inputStyle={styles.input}  
+          inputStyle={styles.input}
+          value={telefone}
+          onChangeText={setTelefone}
         />
         <Button
-        onPress={()=>navigation.navigate("Home")}
+          onPress={handleSalvar}
           title="Salvar"
-          buttonStyle={styles.loginButton}
-          titleStyle={styles.loginButtonText}
+          buttonStyle={styles.salvarButton}
+          titleStyle={styles.salvarButtonText}
         />
-       
-
       </View>
-      
-  
-  
+    </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -49,32 +67,35 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   formContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    backgroundColor: 'black', // Cor de fundo do formulário
     padding: 20,
     width: '80%',
     maxWidth: 400,
+    borderRadius: 10, // Borda arredondada
   },
   input: {
     height: 40,
     marginBottom: 20,
     paddingLeft: 10,
+    color: 'white', // Cor do texto de entrada
   },
-  loginButton: {
-    backgroundColor: 'black',
+  salvarButton: {
+    backgroundColor: 'white',
     borderRadius: 5,
     marginTop: 20,
-    marginBottom: 20
+    marginBottom: 20,
   },
-  loginButtonText: {
-    color: 'white',
+  salvarButtonText: {
+    color: 'black', // Cor do texto do botão
     textAlign: 'center',
   },
-
-  titleText:{
-    color: "white", 
+  titleText: {
+    color: 'white',
     backgroundColor: 'black',
-    textAlign: 'center', 
-    fontWeight: 'bold', 
-    fontSize: 30 
-  }
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 30,
+    marginBottom: 20,
+  },
 });
+

@@ -18,9 +18,9 @@ export default function app (){
             <Stack.Navigator>
                 <Stack.Screen name="Home" component={Login} />
                 <Stack.Screen name="Cadastrar" component={Cadastrar} />
-                <Stack.Screen name="CadastrarContato" component={CadastroContato} />
-                <Stack.Screen name="Lista de Contatos" component={ListaContatos} />
-                <Stack.Screen name="Alterar Excluir" component={AlteraExcluir} />
+                <Stack.Screen name="CadastroContato" component={CadastroContato} />
+                <Stack.Screen name="ListaContatos" component={ListaContatos} />
+                <Stack.Screen name="AlteraExcluir" component={AlteraExcluir} />
             </Stack.Navigator>
         </NavigationContainer>
 

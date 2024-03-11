@@ -1,0 +1,28 @@
+{
+  "list": [
+    {
+      "nome": "Carlos",
+      "email": "carlosjrbk@hotmail.com",
+      "telefone": 86755566,
+      "id": "1057"
+    },
+    {
+      "nome": "Clausiberion",
+      "email": "clausiberionbk@hotmail.com",
+      "telefone": 96753566,
+      "id": "c76c"
+    },
+    {
+      "nome": "Rodrigo",
+      "email": "Rodigo@hotmail.com",
+      "telefone": 99776644,
+      "id": "44a8"
+    },
+    {
+      "id": "9c5b",
+      "nome": "Cleide Maria da Silva",
+      "email": "CleideSilva.admm@gmail.com",
+      "telefone": "81987563456"
+    }
+  ]
+}

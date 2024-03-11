@@ -1,59 +1,81 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Input, Button} from 'react-native-elements';
+import React, { useState } from 'react';
+import { View, StyleSheet, Text } from 'react-native';
+import { Button, Input } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
-export default function AlteraExcluir(){
+export default function AlteraExcluir({ route }) {
+  const navigation = useNavigation();
+  const { nome, email, telefone, id } = route.params;
+  const [editedNome, setEditedNome] = useState(nome);
+  const [editedEmail, setEditedEmail] = useState(email);
+  const [editedTelefone, setEditedTelefone] = useState(telefone);
 
-    const navigation = useNavigation()
+  const handleSalvar = async () => {
+    try {
+      // Enviar os dados editados para o servidor
+      await axios.put(`http://localhost:3000/posts/${id}`, {
+        nome: editedNome,
+        email: editedEmail,
+        telefone: editedTelefone,
+      });
 
-    return (
-       <View style={{ flex: 1}}>
-      <Header
-      leftComponent={
-          <Button  
-          title="< Voltar"
-          onPress={()=>navigation.navigate("ListaContatos")}
-          ></Button>}
-          centerComponent={{ text: 'Cadastro de Clientes', style: { color: '#fff' } }}
-      
+      // Atualizar a lista quando voltar para a tela anterior
+      navigation.goBack();
+    } catch (error) {
+      console.error('Erro ao salvar as alterações:', error);
+    }
+  };
+
+  const handleExcluir = async () => {
+    try {
+      // Enviar a requisição para excluir o contato no servidor
+      await axios.delete(`http://localhost:3000/list/${id}`);
+
+      // Atualizar a lista quando voltar para a tela anterior
+      navigation.goBack();
+    } catch (error) {
+      console.error('Erro ao excluir o contato:', error);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.titleText}>Editar do Contato</Text>
+
+      <Input
+        placeholder="Nome"
+        inputStyle={styles.input}
+        value={editedNome}
+        onChangeText={setEditedNome}
       />
-
-
-      
-      <Text style={styles.titleText}>Cadastro Contato</Text>
-
-
-        <Input
-          placeholder="Nome"
-          inputStyle={styles.input}
-        />
-        <Input
-          placeholder="Email"
-          inputStyle={styles.input}  
-        />
-        <Input
-          placeholder="Telefone"
-          inputStyle={styles.input}  
-        />
-        <Button
-        onPress={()=>navigation.navigate("Home")}
-          title="Alatera"
-          buttonStyle={styles.loginButton}
-          titleStyle={styles.loginButtonText}
-        />
-        <Button
-          title="Excluir"
-          buttonStyle={styles.loginButton}
-          titleStyle={styles.loginButtonText}
-        />
-
-      </View>
-      
-  
-  
+      <Input
+        placeholder="Email"
+        inputStyle={styles.input}
+        value={editedEmail}
+        onChangeText={setEditedEmail}
+      />
+      <Input
+        placeholder="Telefone"
+        inputStyle={styles.input}
+        value={editedTelefone}
+        onChangeText={setEditedTelefone}
+      />
+      <Button
+        onPress={handleSalvar}
+        title="Salvar"
+        buttonStyle={styles.saveButton}
+        titleStyle={styles.saveButtonText}
+      />
+      <Button
+        onPress={handleExcluir}
+        title="Excluir"
+        buttonStyle={styles.deleteButton}
+        titleStyle={styles.deleteButtonText}
+      />
+    </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -61,34 +83,38 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'black',
   },
-  formContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-    padding: 20,
-    width: '80%',
-    maxWidth: 400,
+  titleText: {
+    color: 'white',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 30,
+    marginBottom: 20,
   },
   input: {
     height: 40,
     marginBottom: 20,
     paddingLeft: 10,
+    color: 'white', // Cor do texto de entrada
   },
-  loginButton: {
-    backgroundColor: 'black',
+  saveButton: {
+    backgroundColor: 'white',
     borderRadius: 5,
     marginTop: 20,
-    marginBottom: 20
+    marginBottom: 10,
   },
-  loginButtonText: {
-    color: 'white',
+  saveButtonText: {
+    color: 'black',
     textAlign: 'center',
   },
-
-  titleText:{
-    color: "white", 
-    backgroundColor: 'black',
-    textAlign: 'center', 
-    fontWeight: 'bold', 
-    fontSize: 30 
-  }
+  deleteButton: {
+    backgroundColor: 'white', 
+    borderRadius: 5,
+    marginBottom: 20,
+  },
+  deleteButtonText: {
+    color: 'black',
+    textAlign: 'center',
+  },
 });

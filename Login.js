@@ -26,7 +26,7 @@ export default function Login ()  {
           inputStyle={styles.input}
         />
         <Button
-          onPress={()=>navigation.navigate("Lista de Contatos")}
+          onPress={()=>navigation.navigate("ListaContatos")}
           title="Logar"
           buttonStyle={styles.loginButton}
           titleStyle={styles.loginButtonText}
