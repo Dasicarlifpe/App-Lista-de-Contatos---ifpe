@@ -14,7 +14,7 @@ export default function AlteraExcluir({ route }) {
 
   const handleSalvar = async () => {
     try {
-      // Atualiza os dados do contato no Firestore
+      // Atualiza os dados do contato no Firestore no banco
       await updateDoc(doc(db, 'contatos', id), {
         nome: editedNome,
         email: editedEmail,
