@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
-import axios from 'axios';
+import { auth, db } from './service/firebaseConfig'; 
+import { collection, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 
 export default function AlteraExcluir({ route }) {
   const navigation = useNavigation();
@@ -13,14 +14,14 @@ export default function AlteraExcluir({ route }) {
 
   const handleSalvar = async () => {
     try {
-      // Enviar os dados editados para o servidor
-      await axios.put(`http://localhost:3000/list/${id}`, {
+      // Atualiza os dados do contato no Firestore
+      await updateDoc(doc(db, 'contatos', id), {
         nome: editedNome,
         email: editedEmail,
         telefone: editedTelefone,
       });
 
-      // Atualizar a lista quando voltar para a tela anterior
+      // Navega de volta após salvar as alterações
       navigation.goBack();
     } catch (error) {
       console.error('Erro ao salvar as alterações:', error);
@@ -29,10 +30,10 @@ export default function AlteraExcluir({ route }) {
 
   const handleExcluir = async () => {
     try {
-      // Enviar a requisição para excluir o contato no servidor
-      await axios.delete(`http://localhost:3000/list/${id}`);
+      // Exclui o contato do Firestore
+      await deleteDoc(doc(db, 'contatos', id));
 
-      // Atualizar a lista quando voltar para a tela anterior
+      // Navega de volta após excluir o contato
       navigation.goBack();
     } catch (error) {
       console.error('Erro ao excluir o contato:', error);
@@ -118,3 +119,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
