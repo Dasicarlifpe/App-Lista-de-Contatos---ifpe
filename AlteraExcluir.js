@@ -14,7 +14,7 @@ export default function AlteraExcluir({ route }) {
   const handleSalvar = async () => {
     try {
       // Enviar os dados editados para o servidor
-      await axios.put(`http://localhost:3000/posts/${id}`, {
+      await axios.put(`http://localhost:3000/list/${id}`, {
         nome: editedNome,
         email: editedEmail,
         telefone: editedTelefone,
@@ -41,7 +41,7 @@ export default function AlteraExcluir({ route }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titleText}>Editar do Contato</Text>
+      <Text style={styles.titleText}>Editar Contato</Text>
 
       <Input
         placeholder="Nome"

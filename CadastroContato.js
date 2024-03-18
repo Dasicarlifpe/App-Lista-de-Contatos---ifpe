@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
-import axios from 'axios';
+import { auth, db } from './service/firebaseConfig'; // Importe a instância de autenticação e banco de dados do Firebase
+import { collection, addDoc } from 'firebase/firestore';
 
 export default function CadastroContato() {
   const navigation = useNavigation();
@@ -12,15 +13,24 @@ export default function CadastroContato() {
 
   const handleSalvar = async () => {
     try {
-      // Enviar dados para o JSON Server
-      await axios.post('http://localhost:3000/list', {
-        nome,
-        email,
-        telefone,
-      });
+      // Obtém o usuário atualmente autenticado
+      const user = auth.currentUser;
 
-      // Atualizar a lista de contatos após o cadastro
-      navigation.goBack();
+      if (user) {
+        // Adiciona o novo contato ao Firestore
+        const contatosCollection = collection(db, 'contatos');
+        await addDoc(contatosCollection, {
+          nome,
+          email,
+          telefone,
+          userId: user.uid, // Adiciona o UID do usuário ao documento do contato
+        });
+
+        // Navega de volta após o cadastro
+        navigation.goBack();
+      } else {
+        console.error('Nenhum usuário autenticado encontrado.');
+      }
     } catch (error) {
       console.error('Erro ao cadastrar contato:', error);
     }
@@ -98,4 +108,5 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 });
+
 

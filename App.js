@@ -9,6 +9,8 @@ import AlteraExcluir from './AlteraExcluir';
 
 
 
+
+
 const Stack = createNativeStackNavigator();
 
 export default function app (){
