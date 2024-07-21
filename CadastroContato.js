@@ -65,6 +65,12 @@ export default function CadastroContato() {
           titleStyle={styles.salvarButtonText}
         />
       </View>
+      <Button
+            title="Galeria de Fotos"
+            onPress={() => navigation.navigate('Foto')}
+            buttonStyle={styles.salvarButtonF}
+            titleStyle={styles.salvarButtonTextF}
+          />
     </View>
   );
 }
@@ -97,6 +103,16 @@ const styles = StyleSheet.create({
   },
   salvarButtonText: {
     color: 'black', // Cor do texto do botão
+    textAlign: 'center',
+  },
+  salvarButtonF: {
+    backgroundColor: 'black',
+    borderRadius: 5,
+    marginTop: 20,
+    marginBottom: 20
+  },
+  salvarButtonTextF: {
+    color: 'white', // Cor do texto do botão
     textAlign: 'center',
   },
   titleText: {
