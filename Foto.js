@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, FlatList, Image, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, Button, FlatList, Image, ActivityIndicator, TouchableOpacity, StyleSheet } from 'react-native';
 import { storage } from './service/firebaseConfig';
 import { ref, uploadBytes, listAll, deleteObject, getDownloadURL } from "firebase/storage";
 import { getAuth } from "firebase/auth";
@@ -96,40 +96,35 @@ export default function Foto() {
       <TouchableOpacity
         onPress={() => handleDelete(item)}
         disabled={loading}
-        style={{
-          marginTop: 5,
-          padding: 5,
-          borderRadius: 10,
-          backgroundColor: '#fff',
-          borderWidth: 1,
-          borderColor: '#000',
-          alignItems: 'center'
-        }}
+        style={styles.deleteButton}
       >
-        <Text>{loading ? 'Excluindo...' : 'Excluir'}</Text>
+        <Text style={styles.buttonText}>{loading ? 'Excluindo...' : 'Excluir'}</Text>
       </TouchableOpacity>
     </View>
   );
 
   return (
     <View style={{ backgroundColor: 'black', color: 'white', padding: 20, flex: 1 }}>
-      <Text style={{ color: 'white', fontSize: 24 }}>Gerenciador de Imagens</Text>
-      <Button
-        title="Selecionar Imagem"
+      <Text style={{ color: 'white', fontSize: 24 }}>Fotos na Nuvem</Text>
+      <TouchableOpacity
         onPress={handleImageChange}
-        color="#841584"
-      />
+        style={[styles.button, { marginBottom: 10 }]}
+      >
+        <Text style={styles.buttonText}>Selecionar Imagem</Text>
+      </TouchableOpacity>
       {selectedImage && (
         <Image
           source={{ uri: selectedImage }}
           style={{ width: '50%', height: 100, marginVertical: 10 }}
         />
       )}
-      <Button
-        title={loading ? 'Enviando...' : 'Enviar'}
+      <TouchableOpacity
         onPress={handleUpload}
         disabled={loading}
-      />
+        style={styles.button}
+      >
+        <Text style={styles.buttonText}>{loading ? 'Enviando...' : 'Enviar'}</Text>
+      </TouchableOpacity>
       <Text style={{ color: 'white', fontSize: 20, marginTop: 20 }}>Imagens Salvas</Text>
       {loading && <ActivityIndicator size="large" color="#00ff00" />}
       <FlatList
@@ -140,3 +135,27 @@ export default function Foto() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  button: {
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#000',
+  },
+  buttonText: {
+    color: '#000',
+    fontWeight: 'bold',
+  },
+  deleteButton: {
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#000',
+    flex: 1,
+  }
+});
