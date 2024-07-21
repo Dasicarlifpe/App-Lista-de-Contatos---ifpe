@@ -16,7 +16,7 @@ export default function Login ()  {
       await signInWithEmailAndPassword(auth, email, password);
       
       // Navega para a tela de ListaContatos após o login bem-sucedido
-      navigation.navigate("ListaContatos");
+      navigation.navigate("AreaUser");
     } catch (error) {
       console.error('Erro ao fazer login:', error.message);
     }

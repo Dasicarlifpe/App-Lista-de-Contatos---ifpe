@@ -7,6 +7,7 @@ import CadastroContato from './CadastroContato';
 import ListaContatos from './ListaContatos';
 import AlteraExcluir from './AlteraExcluir';
 import Foto from './Foto';
+import AreaUSer from './AreaUser';
 
 
 
@@ -16,10 +17,10 @@ const Stack = createNativeStackNavigator();
 
 export default function app (){
     return (
-
         <NavigationContainer>
             <Stack.Navigator>
                 <Stack.Screen name="Home" component={Login} />
+                <Stack.Screen name="AreaUser" component={AreaUSer} />
                 <Stack.Screen name="Cadastrar" component={Cadastrar} />
                 <Stack.Screen name="CadastroContato" component={CadastroContato} />
                 <Stack.Screen name="ListaContatos" component={ListaContatos} />
@@ -27,6 +28,4 @@ export default function app (){
                 <Stack.Screen name="Foto" component={Foto} />
             </Stack.Navigator>
         </NavigationContainer>
-
-
     );}
