@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { View, Text, Button, FlatList, Image, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { storage } from './service/firebaseConfig';
 import { ref, uploadBytes, listAll, deleteObject, getDownloadURL } from "firebase/storage";
 import { getAuth } from "firebase/auth";
+import * as ImagePicker from 'expo-image-picker';
 
 export default function Foto() {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -10,17 +12,27 @@ export default function Foto() {
   const auth = getAuth();
   const user = auth.currentUser;
 
-  const handleImageChange = (e) => {
-    if (e.target.files[0]) {
-      setSelectedImage(e.target.files[0]);
+  const handleImageChange = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setSelectedImage(result.uri);
     }
   };
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (selectedImage && user) {
       setLoading(true);
-      const storageRef = ref(storage, `images/${user.uid}/${selectedImage.name}`);
-      uploadBytes(storageRef, selectedImage)
+      const response = await fetch(selectedImage);
+      const blob = await response.blob();
+
+      const storageRef = ref(storage, `images/${user.uid}/${new Date().toISOString()}`);
+      uploadBytes(storageRef, blob)
         .then(() => {
           alert('Imagem enviada com sucesso!');
           fetchImages();
@@ -75,88 +87,56 @@ export default function Foto() {
     fetchImages();
   }, [user]);
 
-  return (
-   <div style={{ backgroundColor: 'black', color: 'white', padding: '20px' }}>
-  <h1>Gerenciador de Imagens</h1>
-  <input 
-    type="file" 
-    onChange={handleImageChange} 
-    style={{ 
-      display: 'block', 
-      marginBottom: '20px', 
-      padding: '10px', 
-      borderRadius: '10px', 
-      backgroundColor: '#fff', 
-      color: '#000', 
-      border: 'none', 
-      cursor: 'pointer' 
-    }} 
-  />
-  {selectedImage && (
-    <img
-      src={URL.createObjectURL(selectedImage)}
-      alt="Selected"
-      style={{ 
-        maxWidth: '50%', 
-        height: '100px', 
-        display: 'block', 
-        margin: '10px 0' 
-      }}
-    />
-  )}
-  <button 
-    onClick={handleUpload} 
-    disabled={loading} 
-    style={{ 
-      display: 'block', 
-      marginTop: '20px', 
-      padding: '10px 20px', 
-      borderRadius: '10px', 
-      backgroundColor: '#fff', 
-      color: '#000', 
-      border: 'none', 
-      cursor: 'pointer', 
-      transition: 'background-color 0.3s' 
-    }}
-  >
-    {loading ? 'Enviando...' : 'Enviar'}
-  </button>
-  <h2>Imagens Salvas</h2>
-  <ul style={{ listStyleType: 'none', padding: '0' }}>
-    {imageList.map((url, index) => (
-      <li key={index} style={{ marginBottom: '10px', display: 'flex', alignItems: 'center' }}>
-        <img
-          src={url}
-          alt={`Imagem ${index}`}
-          style={{ 
-            maxWidth: '50%', 
-            height: '100px', 
-            display: 'block', 
-            marginRight: '10px' 
-          }}
-        />
-        <button 
-          onClick={() => handleDelete(url)} 
-          disabled={loading} 
-          style={{ 
-            marginTop: '5px', 
-            padding: '5px 10px', 
-            borderRadius: '10px', 
-            backgroundColor: '#fff', 
-            color: '#000', 
-            border: 'none', 
-            cursor: 'pointer', 
-            transition: 'background-color 0.3s' 
-          }}
-        >
-          {loading ? 'Excluindo...' : 'Excluir'}
-        </button>
-      </li>
-    ))}
-  </ul>
-</div>
+  const renderItem = ({ item }) => (
+    <View style={{ marginBottom: 10, flexDirection: 'row', alignItems: 'center' }}>
+      <Image
+        source={{ uri: item }}
+        style={{ width: '50%', height: 100, marginRight: 10 }}
+      />
+      <TouchableOpacity
+        onPress={() => handleDelete(item)}
+        disabled={loading}
+        style={{
+          marginTop: 5,
+          padding: 5,
+          borderRadius: 10,
+          backgroundColor: '#fff',
+          borderWidth: 1,
+          borderColor: '#000',
+          alignItems: 'center'
+        }}
+      >
+        <Text>{loading ? 'Excluindo...' : 'Excluir'}</Text>
+      </TouchableOpacity>
+    </View>
+  );
 
-  
+  return (
+    <View style={{ backgroundColor: 'black', color: 'white', padding: 20, flex: 1 }}>
+      <Text style={{ color: 'white', fontSize: 24 }}>Gerenciador de Imagens</Text>
+      <Button
+        title="Selecionar Imagem"
+        onPress={handleImageChange}
+        color="#841584"
+      />
+      {selectedImage && (
+        <Image
+          source={{ uri: selectedImage }}
+          style={{ width: '50%', height: 100, marginVertical: 10 }}
+        />
+      )}
+      <Button
+        title={loading ? 'Enviando...' : 'Enviar'}
+        onPress={handleUpload}
+        disabled={loading}
+      />
+      <Text style={{ color: 'white', fontSize: 20, marginTop: 20 }}>Imagens Salvas</Text>
+      {loading && <ActivityIndicator size="large" color="#00ff00" />}
+      <FlatList
+        data={imageList}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => index.toString()}
+      />
+    </View>
   );
 }
-
