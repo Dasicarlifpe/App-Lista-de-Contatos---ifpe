@@ -65,12 +65,7 @@ export default function CadastroContato() {
           titleStyle={styles.salvarButtonText}
         />
       </View>
-      <Button
-            title="Galeria de Fotos"
-            onPress={() => navigation.navigate('Foto')}
-            buttonStyle={styles.salvarButtonF}
-            titleStyle={styles.salvarButtonTextF}
-          />
+      
     </View>
   );
 }
